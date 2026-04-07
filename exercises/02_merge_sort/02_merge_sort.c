@@ -14,8 +14,52 @@ Student students[MAX_STUDENTS];
 Student temp[MAX_STUDENTS];
 
 void merge_sort(int left, int right) {
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    // [left, right]
+    if(left >= right){
+        return;
+    }else if(left < right){
+        int mid = (left + right) / 2;
+
+        // [left, mid]
+        merge_sort(left, mid);
+        // [mid+1, right]
+        merge_sort(mid+1, right);
+        
+        int merge_index = left;
+        int merge_left = left;
+        int merge_right = mid+1;
+        while(merge_index <= right){
+            if(merge_left <= mid && merge_right <= right){
+                if(students[merge_left].score < students[merge_right].score){
+                    temp[merge_index] = students[merge_right];
+                    merge_index++;
+                    merge_right++;
+                }else{
+                    temp[merge_index] = students[merge_left];
+                    merge_index++;
+                    merge_left++;
+                }
+            }else if(merge_left <= mid){
+                temp[merge_index] = students[merge_left];
+                merge_index++;
+                merge_left++;
+            }else if(merge_right <= right){
+                temp[merge_index] = students[merge_right];
+                merge_index++;
+                merge_right++;
+            }else{
+                // should not happen;
+
+            }
+        }
+        printf("[%d, %d] \n", left, right);
+        for(int i=left; i<=right; i++){
+            students[i] = temp[i];
+            printf("%d ", students[i].score);
+        }
+        printf("\n");
+
+    }
 }
 
 int main(void) {
