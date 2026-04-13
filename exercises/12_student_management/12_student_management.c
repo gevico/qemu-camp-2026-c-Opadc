@@ -19,8 +19,10 @@ int main() {
     
     for (int i = 0; i < 3; i++) 
     {
-	    // TODO: 在这里添加你的代码
-        // I AM NOT DONE
+        Student *student = malloc(sizeof(Student));
+	    fscanf(file, "%s %s %d\n", student->id, student->name, &student->age);
+        // printf("%d: %s %s %d\n", i, student->id, student->name, student->a)
+        students[i] = student;
     }
     fclose(file);
     
