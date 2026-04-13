@@ -39,11 +39,34 @@ void processFile(const char *filename) {
 
     printf("=== 处理数据来自: %s ===\n", filename);
 
+    int size = 0;
+    CompareFunc func;
+    char *formater = NULL;
     switch (choice) {
         // TODO: 在这里添加你的代码
-        // I AM NOT DONE
+        case(1):
+            size = sizeof(int);
+            func = compareInt;
+            formater = "%d";
+            break;
+        case(2):
+            size = sizeof(float);
+            func = compareFloat;
+            formater = "%f";
+            break;
     }
+    void *array = malloc(n*size);
+    for(int i=0; i<n; i++){
+        fscanf(fin, formater, array+i*size);
+    }
+    sort(array, n ,size, func);
 
+    for(int i=0; i<n; i++){
+        if(choice == 1)
+            printf("%d ", *(int*)(array+i*size));
+        else
+            printf("%f ", *(float*)(array+i*size));
+    }
     fclose(fin);
 }
 
