@@ -22,14 +22,32 @@ static void josephus_problem(int n, int k, int m) {
     while (prev->next != head) prev = prev->next;
 
     // 起始位置移动到第 k 个
+
     for (int i = 1; i < k; ++i) {
         // TODO: 在这里添加你的代码
-        // I AM NOT DONE
+        prev = current;
+        current = current->next;
     }
 
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    while(1){
+        for(int i=1; i<m; i++){
+            prev = current;
+            current = current->next;            
+        }
+        if(prev != current){
+            prev->next = current->next;
+            printf("%d ", current->id);
+            free(current);
+            current = prev->next;
+        }else{
+            printf("%d ", current->id);
+            free(current);
+            break;
+        }
+    }
     
+
     printf("\n");
 }
 
