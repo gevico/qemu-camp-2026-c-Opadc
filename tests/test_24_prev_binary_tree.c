@@ -44,7 +44,7 @@ int main() {
         g_current_exercise.completed = 1;
     } else {
         printf("📝 程序实际输出:\n%s\n", output);
-        printf("💡 提示: 请确保程序输出包含两行\n'%s'\n'%s'", expected_output[0], expected_output[2]);
+        printf("💡 提示: 请确保程序输出包含两行\n'%s'\n'%s'", expected_output[0], expected_output[1]);
         strncpy(g_current_exercise.program_output, output, sizeof(g_current_exercise.program_output) - 1);
     }
 

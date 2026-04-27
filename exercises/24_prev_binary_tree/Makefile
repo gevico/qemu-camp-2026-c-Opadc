@@ -1,7 +1,7 @@
 CC = gcc
 CPPFLAGS ?=
 CPPFLAGS += -MMD -MP
-CFLAGS = -Wall -g -O2
+CFLAGS = -Wall -g 
 LDFLAGS =
 LDLIBS =
 
