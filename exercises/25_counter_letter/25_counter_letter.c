@@ -20,17 +20,53 @@ TreeNode* create_node(char letter) {
     return newNode;
 }
 
+int num_a = 0;
 // 向BST中插入节点或更新计数
 TreeNode* insert_or_update(TreeNode* root, char letter) {
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    letter = tolower(letter);
+
+    static TreeNode *real_root = NULL;
+    TreeNode *node = root;
+    TreeNode *parent = root;
+
+    if(!root){
+        real_root = create_node(letter);
+        return real_root;
+    }
+    while(node){
+        parent = node;
+        if(node->letter == letter){
+            node->count++;
+            return real_root;
+        }else if(node->letter > letter){
+            node = node->left;
+        }else{
+            node = node->right;
+        }
+        
+    }
+    if(!node){
+        TreeNode *new_node = create_node(letter);
+        if(parent->letter > letter){
+            parent->left = new_node;
+        }else{
+            parent->right = new_node;
+        }
+        return real_root;
+    }
+    return real_root;
 }
 
 // 中序遍历BST并打印结果（按字母顺序）
 void inorder_traversal(TreeNode* root) {
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    if(!root){
+        return;
+    }
+    inorder_traversal(root->left);
     printf("%c:%d\n", root->letter, root->count);
+    inorder_traversal(root->right);
 }
 
 // 释放BST内存
