@@ -21,7 +21,12 @@ typedef struct {
 // djb2哈希函数
 unsigned long djb2_hash(const char *str) {
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    long hash = 5381;
+    while(str && *str){
+        hash = hash * 33 + *str;
+        str++;
+    }
+    return hash;
 }
 
 // 创建哈希表
@@ -37,13 +42,38 @@ void hash_table_insert(HashTable *ht, const char *word) {
     unsigned long hash = djb2_hash(word) % ht->size;
 
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    HashNode *bucket = ht->table[hash];
+    HashNode *hash_node = bucket;
+    while(hash_node){
+        if(strcmp(hash_node->word, word) == 0){
+            hash_node->count++;
+            return;
+        }
+        hash_node = hash_node->next;
+    }
+
+    // not found.
+    hash_node = malloc(sizeof(HashNode));
+    hash_node->word = malloc(strlen(word)+1);
+    strcpy(hash_node->word, word);
+    hash_node->count = 1;
+
+    hash_node->next = bucket;
+    ht->table[hash] = hash_node;
 }
 
 // 从哈希表中获取所有单词及其计数
 void get_all_words(HashTable *ht, HashNode **nodes, int *count) {
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    int node_counts = 0;
+    for(int i=0; i<ht->size; i++){
+        HashNode *bucket = ht->table[i];
+        while(bucket){
+            nodes[node_counts++] = bucket;
+            bucket = bucket->next; 
+        }
+    }
+    *count = node_counts;
 }
 
 // 比较函数用于排序
@@ -53,7 +83,13 @@ int compare_nodes(const void *a, const void *b) {
     
     // 先按计数降序，再按字母升序
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    if(node_a->count < node_b->count){
+        return -1;
+    }else if(node_a->count > node_b->count){
+        return 1;
+    }else{
+        return strcmp(node_a->word, node_b->word);
+    }
 }
 
 // 释放哈希表内存
@@ -74,7 +110,32 @@ void free_hash_table(HashTable *ht) {
 // 从字符串中获取下一个单词
 char *get_next_word(const char **text) {
     // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    char *strings = *text;
+    
+    if(strings && *strings == '\n' || *strings == '\0'){
+        return NULL;
+    }
+    // bypass all no alpha
+    while(strings && !isalpha(*strings))
+        strings++;
+    
+    char *word_begin = strings;
+    
+    
+    while(strings && isalpha(*strings))
+        strings++;
+    char *word_end = strings;
+
+    int word_len = word_end - word_begin;
+
+    char *word = malloc(word_len+1);
+    strncpy(word, word_begin, word_len);
+    word[word_len] = '\0';
+
+    *text = word_end;
+    printf("word: %s\n", word);
+    return word;
+
 }
 
 int main(int argc, char *argv[]) {
@@ -91,6 +152,7 @@ int main(int argc, char *argv[]) {
     
     printf("正在读取文件: %s\n", file_path);
     
+    memset(buffer, 0, sizeof(buffer));
     // 从文件读取直到EOF
     while (fgets(buffer, sizeof(buffer), file) != NULL) {
         const char *ptr = buffer;
@@ -100,6 +162,7 @@ int main(int argc, char *argv[]) {
             hash_table_insert(ht, word);
             free(word);
         }
+        memset(buffer, 0, sizeof(buffer));
     }
     
     fclose(file);
