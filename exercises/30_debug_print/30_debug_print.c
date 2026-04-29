@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <execinfo.h>
 
-#ifdef TODO
 
-#define DEBUG_PRINT(fmt, ...) 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+#ifdef DEBUG_LEVEL
+
+#define DEBUG_PRINT(fmt, ...)  \
+    printf("DEBUG: func=%s, line=%d, " fmt, __func__, __LINE__, ##__VA_ARGS__)
 
 #else
 
