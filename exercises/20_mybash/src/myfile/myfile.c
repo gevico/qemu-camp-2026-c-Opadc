@@ -38,8 +38,24 @@ int __cmd_myfile(const char* filename) {
     fflush(stdout);
     printf("filepath: %s\n", filepath);
 
-    // TODO: 在这里添加你的代码
-    // I AM NOT DONE
+    fd = open(filepath, O_RDONLY);
+    if (fd < 0) {
+        perror("open");
+        return 1;
+    }
+
+    ssize_t nread = read(fd, &ehdr, sizeof(ehdr));
+    if (nread != (ssize_t)sizeof(ehdr)) {
+        perror("read");
+        close(fd);
+        return 1;
+    }
+
+    if (memcmp(ehdr.e_ident, ELFMAG, SELFMAG) != 0) {
+        fprintf(stderr, "%s is not an ELF file\n", filepath);
+        close(fd);
+        return 1;
+    }
 
     print_elf_type(ehdr.e_type);
     close(fd);
